@@ -44,7 +44,7 @@
                     FontSize="Medium"
                     BackgroundColor="#a90409"
                     x:Name="BtnSignup"
-                    Clicked="BtnSignup_OnClicked" />
+                    Clicked="BtnSignup_ClickedAsync" />
 
             <HorizontalStackLayout Grid.Row="4"
                                    Spacing="2" HorizontalOptions="Center"
@@ -54,7 +54,7 @@
                        FontAttributes="Bold">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer x:Name="TapLogin"
-                                              Tapped="TapLogin_OnTapped" />
+                                              Tapped="TapLogin_TappedAsync" />
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>

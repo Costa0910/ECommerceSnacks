@@ -9,7 +9,7 @@ namespace MobileECommerce.Services;
 public class ApiService
 {
     private readonly HttpClient _httpClient;
-    private const string _baseUrl = "https://8680hvff-7066.brs.devtunnels.ms/";
+    private const string _baseUrl = "https://www.appsnacks2024.somee.com/";
     private readonly ILogger<ApiService> _logger;
     JsonSerializerOptions _serializerOptions;
 
