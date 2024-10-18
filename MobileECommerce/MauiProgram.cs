@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MobileECommerce.Services;
 
 namespace MobileECommerce;
 
@@ -20,6 +21,7 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddHttpClient();
+        builder.Services.AddSingleton<ApiService>();
         return builder.Build();
     }
 }

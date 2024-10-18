@@ -62,25 +62,19 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\..\..\Downloads\01-Maui_Imagens\dotnet_bot.png">
-        <Link>Resources\Images\dotnet_bot.png</Link>
-      </Content>
-    </ItemGroup>
+<!--    <ItemGroup>-->
+<!--      <Content Include="..\..\..\Downloads\01-Maui_Imagens\dotnet_bot.png">-->
+<!--        <Link>Resources\Images\dotnet_bot.png</Link>-->
+<!--      </Content>-->
+<!--    </ItemGroup>-->
 
     <ItemGroup>
       <MauiSplashScreen Include="Resources\Raw\splash.svg">
         <Color>#512BD4</Color>
         <BaseSize>128,128</BaseSize>
       </MauiSplashScreen>
+      <MauiSplashScreen Include="Resources\Splash\lanche.svg" />
       <None Remove="Resources\Splash\lanche.svg" />
-        <MauiSplashScreen Include="Resources\Splash\Lanche.svg" 
-                          Color="#ede5cc" TintColor="#67203c" 
-                          BaseSize="128, 128" />
     </ItemGroup>
 
 </Project>
