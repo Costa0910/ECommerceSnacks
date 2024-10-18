@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.34929.205
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiECommerce", "ApiECommerce\ApiECommerce.csproj", "{6DCCE99E-B33C-40BE-BE98-E60C5F23512B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileECommerce", "MobileECommerce\MobileECommerce.csproj", "{F143BB37-5B6A-4ACA-9D71-F26141F86508}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6DCCE99E-B33C-40BE-BE98-E60C5F23512B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DCCE99E-B33C-40BE-BE98-E60C5F23512B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DCCE99E-B33C-40BE-BE98-E60C5F23512B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F143BB37-5B6A-4ACA-9D71-F26141F86508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F143BB37-5B6A-4ACA-9D71-F26141F86508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F143BB37-5B6A-4ACA-9D71-F26141F86508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F143BB37-5B6A-4ACA-9D71-F26141F86508}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

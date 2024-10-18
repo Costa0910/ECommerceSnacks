@@ -8,8 +8,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// configura a aplicação para autenticar os users usando tokens JWT,
-// verificando o emissor, audiência, tempo de vida e chave de assinatura do emissor
+// configura a aplicaï¿½ï¿½o para autenticar os users usando tokens JWT,
+// verificando o emissor, audiï¿½ncia, tempo de vida e chave de assinatura do emissor
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            //define o emissor e a audiência validas para o token JWT obtidos da aplicação
+            //define o emissor e a audiï¿½ncia validas para o token JWT obtidos da aplicaï¿½ï¿½o
             ValidAudience = builder.Configuration["JWT:Audience"],
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             //Define a chave de assinatura usada para assinar e verificar o token JWT.
@@ -38,7 +38,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer"
     });
-    // Implementa a autenticação em todos os endpoints da API
+    // Implementa a autenticaï¿½ï¿½o em todos os endpoints da API
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -76,6 +76,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // seed database on development
+        // seed database on development
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await context.Database.MigrateAsync();
+    }
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }

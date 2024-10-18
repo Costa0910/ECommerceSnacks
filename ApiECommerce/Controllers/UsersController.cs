@@ -70,12 +70,14 @@ namespace ApiECommerce.Controllers
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
+
             return new ObjectResult(new
             {
-                AccessToken = jwt,
-                TokenType = "bearer",
-                UserId = currentUser.Id,
-                UserName = currentUser.Name
+                accesstoken = jwt,
+                expiration = token.ValidTo,
+                tokentype = "bearer",
+                usuarioid = user.Id,
+                usuarionome = user.Name
             });
         }
 
