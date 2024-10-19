@@ -24,7 +24,8 @@
 
             <CollectionView Grid.Row="2"
                             x:Name="CvCategorias"
-                            SelectionMode="Single"><!-- SelectionChanged="CvCategorias_SelectionChanged" -->
+                            SelectionMode="Single"
+                            SelectionChanged="CvCategorias_OnSelectionChanged">
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="20"

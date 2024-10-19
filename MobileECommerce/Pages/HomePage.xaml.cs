@@ -19,9 +19,12 @@ public partial class HomePage : ContentPage
     public HomePage(ApiService apiService, IValidator validator)
     {
         InitializeComponent();
-        _apiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
+        _apiService = apiService ??
+                      throw new ArgumentNullException(nameof(apiService));
         _validator = validator;
-        LblNomeUsuario.Text = "Olá, " + Preferences.Get("usuarionome", string.Empty);
+        LblNomeUsuario.Text
+            = "Olá, " + Preferences.Get("usuarionome", string.Empty);
+        Title = AppConfig.HomePageTitle;
     }
 
     protected override async void OnAppearing()
@@ -41,12 +44,14 @@ public partial class HomePage : ContentPage
             if (errorMessage == "Unauthorized" && !_loginPageDisplayed)
             {
                 await DisplayLoginPage();
-               return Enumerable.Empty<Category>();
+                return Enumerable.Empty<Category>();
             }
 
             if (categorias == null)
             {
-                await DisplayAlert("Erro", errorMessage ?? "Não foi possível obter as categorias.", "OK");
+                await DisplayAlert("Erro",
+                    errorMessage ?? "Não foi possível obter as categorias.",
+                    "OK");
                 return Enumerable.Empty<Category>();
             }
 
@@ -55,7 +60,8 @@ public partial class HomePage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "OK");
+            await DisplayAlert("Erro",
+                $"Ocorreu um erro inesperado: {ex.Message}", "OK");
             return Enumerable.Empty<Category>();
         }
     }
@@ -64,7 +70,8 @@ public partial class HomePage : ContentPage
     {
         try
         {
-            var (produtos, errorMessage) = await _apiService.GetProdutos("maisvendido", string.Empty);
+            var (produtos, errorMessage)
+                = await _apiService.GetProdutos("maisvendido", string.Empty);
 
             if (errorMessage == "Unauthorized" && !_loginPageDisplayed)
             {
@@ -74,7 +81,9 @@ public partial class HomePage : ContentPage
 
             if (produtos == null)
             {
-                await DisplayAlert("Erro", errorMessage ?? "Não foi possível obter as categorias.", "OK");
+                await DisplayAlert("Erro",
+                    errorMessage ?? "Não foi possível obter as categorias.",
+                    "OK");
                 return Enumerable.Empty<Product>();
             }
 
@@ -83,7 +92,8 @@ public partial class HomePage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "OK");
+            await DisplayAlert("Erro",
+                $"Ocorreu um erro inesperado: {ex.Message}", "OK");
             return Enumerable.Empty<Product>();
         }
     }
@@ -94,7 +104,8 @@ public partial class HomePage : ContentPage
     {
         try
         {
-            var (produtos, errorMessage) = await _apiService.GetProdutos("popular", string.Empty);
+            var (produtos, errorMessage)
+                = await _apiService.GetProdutos("popular", string.Empty);
 
             if (errorMessage == "Unauthorized" && !_loginPageDisplayed)
             {
@@ -104,24 +115,44 @@ public partial class HomePage : ContentPage
 
             if (produtos == null)
             {
-                await DisplayAlert("Erro", errorMessage ?? "Não foi possível obter as categorias.", "OK");
+                await DisplayAlert("Erro",
+                    errorMessage ?? "Não foi possível obter as categorias.",
+                    "OK");
                 return Enumerable.Empty<Product>();
             }
+
             CvPopulares.ItemsSource = produtos;
             return produtos;
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "OK");
+            await DisplayAlert("Erro",
+                $"Ocorreu um erro inesperado: {ex.Message}", "OK");
             return Enumerable.Empty<Product>();
         }
     }
 
-   //-------------------
+    //-------------------
 
     private async Task DisplayLoginPage()
     {
         _loginPageDisplayed = true;
         await Navigation.PushAsync(new LoginPage(_apiService, _validator));
+    }
+
+    private void CvCategorias_OnSelectionChanged(object sender,
+        SelectionChangedEventArgs e)
+    {
+        var currentSelection = e.CurrentSelection.FirstOrDefault() as Category;
+
+        if (currentSelection == null) return;
+
+
+        Navigation.PushAsync(new ListaProdutosPage(currentSelection.Id,
+            currentSelection.Name!,
+            _apiService,
+            _validator));
+
+        ((CollectionView)sender).SelectedItem = null;
     }
 }
