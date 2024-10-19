@@ -110,6 +110,12 @@ public class ApiService
             return new ApiResponse<bool> { ErrorMessage = ex.Message };
         }
     }
+    public async Task<(Product? ProdutoDetalhe, string? ErrorMessage)>
+        GetProdutoDetalhe(int produtoId)
+    {
+        string endpoint = $"api/Products/{produtoId}";
+        return await GetAsync<Product>(endpoint);
+    }
 
     private async Task<HttpResponseMessage> PostRequest(string uri,
         HttpContent content)

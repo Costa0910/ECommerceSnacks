@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MobileECommerce.Models;
 using MobileECommerce.Services;
 using MobileECommerce.Validations;
@@ -65,6 +60,23 @@ public partial class ListaProdutosPage : ContentPage
             return Enumerable.Empty<Product>();
         }
     }
+
+
+private void CvProdutos_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    var currentSelection = e.CurrentSelection.FirstOrDefault() as Product;
+
+    if (currentSelection is null) 
+                 return;
+
+    Navigation.PushAsync(new ProdutoDetalhesPage(currentSelection.Id,
+                                                 currentSelection.Name!,
+                                                 _apiService,
+                                                 _validator));
+
+    ((CollectionView)sender).SelectedItem = null;
+
+}
 
     private async Task DisplayLoginPage()
     {
