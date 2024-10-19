@@ -31,6 +31,20 @@ public partial class CarrinhoPage : ContentPage
     {
         base.OnAppearing();
         await GetItensCarrinhoCompra();
+        bool enderecoSalvo = Preferences.ContainsKey("endereco");
+        if (enderecoSalvo)
+        {
+            string name = Preferences.Get("nome", string.Empty);
+            string address = Preferences.Get("endereco", string.Empty);
+            string phone = Preferences.Get("telefone", string.Empty);
+
+            LblEndereco.Text
+                = $"{name}\n{address}\n{phone}";
+        }
+        else
+        {
+            LblEndereco.Text = "Informe o endereco de entrega";
+        }
     }
 
     private async Task<bool> GetItensCarrinhoCompra()
@@ -81,6 +95,52 @@ public partial class CarrinhoPage : ContentPage
         }
     }
 
+    private async void BtnIncrementar_OnClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button &&
+            button.BindingContext is CarrinhoCompraItem itemCarrinho)
+        {
+            itemCarrinho.Quantity++;
+            AtualizaPrecoTotal();
+            await _apiService.AtualizaQuantidadeItemCarrinho(
+                itemCarrinho.ProductId, "aumentar");
+        }
+    }
+
+    private async void BtnDecrementar_OnClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button &&
+            button.BindingContext is CarrinhoCompraItem itemCarrinho)
+        {
+            if (itemCarrinho.Quantity == 1) return;
+            else
+            {
+                itemCarrinho.Quantity--;
+                AtualizaPrecoTotal();
+                await _apiService.AtualizaQuantidadeItemCarrinho(
+                    itemCarrinho.ProductId, "diminuir");
+            }
+        }
+    }
+
+    private async void BtnDeletar_Clicked(object sender, EventArgs e)
+    {
+        if (sender is ImageButton button &&
+            button.BindingContext is CarrinhoCompraItem itemCarrinho)
+        {
+            bool resposta = await DisplayAlert("Confirma  o",
+                "Tem certeza que deseja excluir este item do carrinho?", "Sim",
+                "N o");
+            if (resposta)
+            {
+                ItensCarrinhoCompra.Remove(itemCarrinho);
+                AtualizaPrecoTotal();
+                await _apiService.AtualizaQuantidadeItemCarrinho(itemCarrinho
+                    .ProductId, "apagar");
+            }
+        }
+    }
+
     private void AtualizaPrecoTotal()
     {
         try
@@ -102,5 +162,19 @@ public partial class CarrinhoPage : ContentPage
         _loginPageDisplayed = true;
 
         await Navigation.PushAsync(new LoginPage(_apiService, _validator));
+    }
+
+    private async void BtnEditaEndereco_OnClicked(object sender, EventArgs e)
+    {
+        if (ItensCarrinhoCompra.Any())
+        {
+            await Navigation.PushAsync(new EnderecoPage());
+        }
+        else
+        {
+            await DisplayAlert("Erro",
+                "Não é possível prosseguir sem itens no carrinho de compra.",
+                "OK");
+        }
     }
 }

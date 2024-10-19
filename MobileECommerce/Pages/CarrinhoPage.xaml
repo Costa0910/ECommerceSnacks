@@ -71,7 +71,7 @@
                                             FontAttributes="Bold"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
-                                            x:Name="BtnDecrementar" />
+                                            x:Name="BtnDecrementar" Clicked="BtnDecrementar_OnClicked" />
 
                                     <Label x:Name="LblQuantidade"
                                            TextColor="#80574D"
@@ -88,7 +88,7 @@
                                             FontAttributes="Bold"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
-                                            x:Name="BtnIncrementar" />
+                                            x:Name="BtnIncrementar" Clicked="BtnIncrementar_OnClicked" />
 
                                 </HorizontalStackLayout>
 
@@ -100,7 +100,7 @@
                                              Padding="0"
                                              HorizontalOptions="Center"
                                              VerticalOptions="Center"
-                                             x:Name="BtnDeletar" />
+                                             x:Name="BtnDeletar" Clicked="BtnDeletar_Clicked" />
                             </Grid>
                         </Frame>
                     </DataTemplate>
@@ -129,7 +129,7 @@
                                  HorizontalOptions="End"
                                  VerticalOptions="Start"
                                  Source="edit"
-                                 x:Name="BtnEditaEndereco" />
+                                 x:Name="BtnEditaEndereco" Clicked="BtnEditaEndereco_OnClicked"/>
 
                     <Label Grid.Row="1"
                            Grid.Column="0"
