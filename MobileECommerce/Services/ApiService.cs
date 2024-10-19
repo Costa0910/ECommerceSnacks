@@ -214,6 +214,37 @@ public class ApiService
         }
     }
 
+    public async Task<(ImagemPerfil? ImagemPerfil, string? ErrorMessage)> GetImagemPerfilUsuario()
+    {
+        string endpoint = "api/Users/userimage";
+        return await GetAsync<ImagemPerfil>(endpoint);
+    }
+    public async Task<ApiResponse<bool>> UploadImagemUsuario(byte[] imageArray)
+    {
+        try
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new ByteArrayContent(imageArray), "image", "image.jpg");
+            var response = await PostRequest("api/Users/uploadimage", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorMessage = response.StatusCode == HttpStatusCode.Unauthorized
+                    ? "Unauthorized"
+                    : $"Erro ao enviar requisição HTTP: {response.StatusCode}";
+
+                _logger.LogError($"Erro ao enviar requisição HTTP: {response.StatusCode}");
+                return new ApiResponse<bool> { ErrorMessage = errorMessage };
+            }
+            return new ApiResponse<bool> { Data = true };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao fazer upload da imagem do usuário: {ex.Message}");
+            return new ApiResponse<bool> { ErrorMessage = ex.Message };
+        }
+    }
+
     private async Task<HttpResponseMessage> PutRequest(string uri, HttpContent content)
     {
         var enderecoUrl = AppConfig.BaseUrl + uri;
@@ -236,6 +267,7 @@ public class ApiService
         var enderecoUrl = BaseUrl + uri;
         try
         {
+            // AddAuthorizationHeader();
             var result = await _httpClient.PostAsync(enderecoUrl, content);
             return result;
         }
