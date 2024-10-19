@@ -4,6 +4,6 @@ public class Token
 {
     public string? AccessToken { get; set; }
     public string? TokenType { get; set; }
-    public int? UsuarioId { get; set; }
-    public string? UsuarioNome { get; set; }
+    public string? userName { get; set; }
+    public int? userId { get; set; }
 }

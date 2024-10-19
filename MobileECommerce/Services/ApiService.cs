@@ -9,9 +9,9 @@ namespace MobileECommerce.Services;
 public class ApiService
 {
     private readonly HttpClient _httpClient;
-    private const string _baseUrl = "https://www.appsnacks2024.somee.com/";
+    private const string BaseUrl = "https://www.appsnacks2024.somee.com/";
     private readonly ILogger<ApiService> _logger;
-    JsonSerializerOptions _serializerOptions;
+    readonly JsonSerializerOptions _serializerOptions;
 
     public ApiService(HttpClient httpClient,
         ILogger<ApiService> logger)
@@ -32,17 +32,17 @@ public class ApiService
         {
             var register = new Register()
             {
-                Nome = nome,
+                Name = nome,
                 Email = email,
-                Telefone = telefone,
-                Senha = password
+                Phone = telefone,
+                Password = password
             };
 
             var json = JsonSerializer.Serialize(register, _serializerOptions);
             var content
                 = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await PostRequest("api/Usuarios/Register", content);
+            var response = await PostRequest("api/Users/Register", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -72,14 +72,14 @@ public class ApiService
             var login = new Login()
             {
                 Email = email,
-                Senha = password
+                Password = password
             };
 
             var json = JsonSerializer.Serialize(login, _serializerOptions);
             var content
                 = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await PostRequest("api/Usuarios/Login", content);
+            var response = await PostRequest("api/Users/Login", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -98,8 +98,8 @@ public class ApiService
                     _serializerOptions);
 
             Preferences.Set("accesstoken", result!.AccessToken);
-            Preferences.Set("usuarioid", (int)result.UsuarioId!);
-            Preferences.Set("usuarionome", result.UsuarioNome);
+            Preferences.Set("usuarioid", (int)result.userId!);
+            Preferences.Set("usuarionome", result.userName);
 
             return new ApiResponse<bool> { Data = true };
         }
@@ -113,7 +113,7 @@ public class ApiService
     private async Task<HttpResponseMessage> PostRequest(string uri,
         HttpContent content)
     {
-        var enderecoUrl = _baseUrl + uri;
+        var enderecoUrl = BaseUrl + uri;
         try
         {
             var result = await _httpClient.PostAsync(enderecoUrl, content);

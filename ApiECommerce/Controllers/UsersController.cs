@@ -76,8 +76,8 @@ namespace ApiECommerce.Controllers
                 accesstoken = jwt,
                 expiration = token.ValidTo,
                 tokentype = "bearer",
-                usuarioid = user.Id,
-                usuarionome = user.Name
+                userId = user.Id,
+                userName = user.Name
             });
         }
 
