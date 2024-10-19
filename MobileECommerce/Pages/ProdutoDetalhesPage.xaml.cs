@@ -15,6 +15,8 @@ public partial class ProdutoDetalhesPage : ContentPage
     private readonly IValidator _validator;
     private int _produtoId;
     private bool _loginPageDisplayed = false;
+    private FavoritosService _favoritosService = new FavoritosService();
+    private string _imagemUrl;
 
     public ProdutoDetalhesPage(int produtoId,
         string produtoNome,
@@ -33,6 +35,7 @@ public partial class ProdutoDetalhesPage : ContentPage
     {
         base.OnAppearing();
         await GetProdutoDetalhes(_produtoId);
+        AtualizaFavoritoButton();
     }
 
     private async Task<Product?> GetProdutoDetalhes(int produtoId)
@@ -63,6 +66,7 @@ public partial class ProdutoDetalhesPage : ContentPage
             LblProdutoPreco.Text = produtoDetalhe.Price.ToString();
             LblProdutoDescricao.Text = produtoDetalhe.Details;
             LblPrecoTotal.Text = produtoDetalhe.Price.ToString();
+            _imagemUrl = produtoDetalhe.CaminhoImagem;
         }
         else
         {
@@ -128,15 +132,18 @@ public partial class ProdutoDetalhesPage : ContentPage
                 ProductId = _produtoId,
                 ClientId = Preferences.Get("usuarioid", 0)
             };
-            var response = await _apiService.AdicionaItemNoCarrinho(carrinhoCompra);
+            var response
+                = await _apiService.AdicionaItemNoCarrinho(carrinhoCompra);
             if (response.Data)
             {
-                await DisplayAlert("Sucesso", "Item adicionado ao carrinho !", "OK");
+                await DisplayAlert("Sucesso", "Item adicionado ao carrinho !",
+                    "OK");
                 await Navigation.PopAsync();
             }
             else
             {
-                await DisplayAlert("Erro", $"Falha ao adicionar item: {response.ErrorMessage}", "OK");
+                await DisplayAlert("Erro",
+                    $"Falha ao adicionar item: {response.ErrorMessage}", "OK");
             }
         }
         catch (Exception ex)
@@ -145,9 +152,47 @@ public partial class ProdutoDetalhesPage : ContentPage
         }
     }
 
-    private void ImagemBtnFavorito_OnClicked(object? sender, EventArgs e)
+    private async void ImagemBtnFavorito_OnClicked(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var existeFavorito = await _favoritosService.ReadAsync(_produtoId);
+            if (existeFavorito is not null)
+            {
+                await _favoritosService.DeleteAsync(existeFavorito);
+            }
+            else
+            {
+                var produtoFavorito = new ProdutoFavorito()
+                {
+                    ProdutoId = _produtoId,
+                    IsFavorito = true,
+                    Detalhe = LblProdutoDescricao.Text,
+                    Nome = LblProdutoNome.Text,
+                    Preco = Convert.ToDecimal(LblProdutoPreco.Text),
+                    ImagemUrl = _imagemUrl
+                };
+
+                await _favoritosService.CreateAsync(produtoFavorito);
+            }
+
+            AtualizaFavoritoButton();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", $"Ocorreu um erro: {ex.Message}", "OK");
+        }
+    }
+
+    private async void AtualizaFavoritoButton()
+    {
+        var existeFavorito = await
+            _favoritosService.ReadAsync(_produtoId);
+
+        if (existeFavorito is not null)
+            ImagemBtnFavorito.Source = "heartfill";
+        else
+            ImagemBtnFavorito.Source = "heart";
     }
 
     private async Task DisplayLoginPage()
