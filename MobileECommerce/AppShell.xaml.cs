@@ -20,7 +20,7 @@ public partial class AppShell : Shell
     private void ConfigureShell()
     {
         var homePage = new HomePage(_apiService, _validator);
-        var carrinhoPage = new CarrinhoPage();
+        var carrinhoPage = new CarrinhoPage(_apiService, _validator);
         var favoritosPage = new FavoritosPage();
         var perfilPage = new PerfilPage();
 

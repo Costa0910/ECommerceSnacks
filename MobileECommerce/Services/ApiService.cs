@@ -144,6 +144,12 @@ public class ApiService
         }
     }
 
+    public async Task<(List<CarrinhoCompraItem>? CarrinhoCompraItems, string? ErrorMessage)> GetItensCarrinhoCompra(int usuarioId)
+    {
+        var endpoint = $"api/ShoppingCartItems/{usuarioId}";
+        return await GetAsync<List<CarrinhoCompraItem>>(endpoint);
+    }
+
     private async Task<HttpResponseMessage> PostRequest(string uri,
         HttpContent content)
     {
