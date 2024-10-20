@@ -261,13 +261,27 @@ public class ApiService
         }
     }
 
+    public async Task<(List<PedidoPorUsuario>?, string? ErrorMessage)> GetPedidosPorUsuario(int usuarioId)
+    {
+
+        string endpoint = $"api/Orders/GetOrdersByUser/{usuarioId}";
+
+        return await GetAsync<List<PedidoPorUsuario>>(endpoint);
+    }
+
+    public async Task<(List<PedidoDetalhe>?, string? ErrorMessage)> GetPedidoDetalhes(int pedidoId)
+    {
+        string endpoint = $"api/Orders/GetOrderDetails/{pedidoId}";
+
+        return await GetAsync<List<PedidoDetalhe>>(endpoint);
+    }
+
     private async Task<HttpResponseMessage> PostRequest(string uri,
         HttpContent content)
     {
         var enderecoUrl = BaseUrl + uri;
         try
         {
-            // AddAuthorizationHeader();
             var result = await _httpClient.PostAsync(enderecoUrl, content);
             return result;
         }

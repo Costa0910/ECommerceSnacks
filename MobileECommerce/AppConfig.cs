@@ -7,5 +7,5 @@ public static class AppConfig
         = "https://www.appsnacks2024.somee.com/";
     public static readonly string HomePageTitle
         = "Mobile E-Commerce";
-    public static readonly string PerfilImagemPadrao = "Resources/Images/user1.png";
+    public static readonly string PerfilImagemPadrao = "Resources/Images/user.png";
 }
