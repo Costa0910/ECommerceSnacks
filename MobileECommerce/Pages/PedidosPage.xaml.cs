@@ -32,27 +32,25 @@ public partial class PedidosPage : ContentPage
     {
         try
         {
-            var (pedidos, errorMessage)
-                = await _apiService.GetPedidosPorUsuario(
-                    Preferences.Get("usuarioid", 0));
+            // Exibe o indicador de carregamento
+            loadPedidosIndicator.IsRunning = true;
+            loadPedidosIndicator.IsVisible = true;
+
+            var (pedidos, errorMessage) = await _apiService.GetPedidosPorUsuario(Preferences.Get("usuarioid", 0));
 
             if (errorMessage == "Unauthorized" && !_loginPageDisplayed)
             {
                 await DisplayLoginPage();
                 return;
             }
-
             if (errorMessage == "NotFound")
             {
-                await DisplayAlert("Aviso",
-                    "N o existem pedidos para o cliente.", "OK");
+                await DisplayAlert("Aviso", "N o existem pedidos para o cliente.", "OK");
                 return;
             }
-
             if (pedidos is null)
             {
-                await DisplayAlert("Erro",
-                    errorMessage ?? "N o foi poss vel obter pedidos.", "OK");
+                await DisplayAlert("Erro", errorMessage ?? "N o foi poss vel obter pedidos.", "OK");
                 return;
             }
             else
@@ -62,9 +60,13 @@ public partial class PedidosPage : ContentPage
         }
         catch (Exception)
         {
-            await DisplayAlert("Erro",
-                "Ocorreu um erro ao obter os pedidos. Tente novamente mais tarde.",
-                "OK");
+            await DisplayAlert("Erro", "Ocorreu um erro ao obter os pedidos. Tente novamente mais tarde.", "OK");
+        }
+        finally
+        {
+            // Esconde o indicador de carregamento
+            loadPedidosIndicator.IsRunning = false;
+            loadPedidosIndicator.IsVisible = false;
         }
     }
 

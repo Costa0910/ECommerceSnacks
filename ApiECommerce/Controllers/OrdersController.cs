@@ -87,7 +87,7 @@ namespace ApiECommerce.Controllers
                                      DataPedido = pedido.DataPedido,
                                  }).ToListAsync();*/
 
-            var orders = await _appDbContext.Orders
+            var orders = await _appDbContext.Orders.AsNoTracking()
                 .Where(o => o.UserId == userId)
                 .OrderByDescending(o => o.OrderDate)
                 .Select(o => new
@@ -129,7 +129,7 @@ namespace ApiECommerce.Controllers
                                             ProdutoPreco = produto.Preco
                                         }).ToListAsync();*/
 
-            var orderDetails = await _appDbContext.OrderDetails
+            var orderDetails = await _appDbContext.OrderDetails.AsNoTracking()
                 .Where(od => od.OrderId == orderId)
                 .Include(od => od.Order)
                 .Include(od => od.Product)
@@ -144,7 +144,7 @@ namespace ApiECommerce.Controllers
                 })
                 .ToListAsync();
 
-            if (orderDetails == null || orderDetails.Count == 0)
+            if (!orderDetails.Any())
             {
                 return NotFound("Detalhes do pedido não encontrados.");
             }
